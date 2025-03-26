@@ -37,6 +37,21 @@ public class BookController {
         return books.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(books);
     }
 
+    // Endpoint to retrieve a book by its ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+        logger.info("Received request to fetch book with ID: {}", id);
+        Optional<Book> book = bookService.getBookById(id); // Fetch the book by ID using the service layer
+        if (book.isPresent()) {
+            logger.info("Book found with ID {}: {}", id, book.get());
+            return ResponseEntity.ok(book.get()); // Return the book if found
+        } else {
+            logger.warn("Book with ID {} not found", id);
+            return ResponseEntity.notFound().build(); // Return 404 Not Found if the book is not found
+        }
+    }
+
+
 
     // Endpoint to update an existing book by its ID
     @PutMapping("/{id}")
